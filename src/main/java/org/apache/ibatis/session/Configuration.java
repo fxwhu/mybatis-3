@@ -97,22 +97,34 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 public class Configuration {
 
   protected Environment environment;
-
+  //允许在嵌套预计中使用分页（rowBounds）。 允许为false
   protected boolean safeRowBoundsEnabled;
+  //允许在嵌套中使用分页（resultHandler）
   protected boolean safeResultHandlerEnabled = true;
+  //是否开启自动驼峰命名规则（came case）映射，字段映射到类中的属性名
   protected boolean mapUnderscoreToCamelCase;
+  //当开启试，任何方法的调用都会加载该对象的所有属性
   protected boolean aggressiveLazyLoading;
+  //是否允许单一语句返回多个结果集
   protected boolean multipleResultSetsEnabled = true;
+  //允许jdbc支持自动生成主键
   protected boolean useGeneratedKeys;
+  //使用列表替换列名
   protected boolean useColumnLabel = true;
+  //是否启用缓存
   protected boolean cacheEnabled = true;
+  //指定结果集中值为null的时候是否调用映射对象的setter (mapper 对象为put) 方法，这对应有Map.keySet()依赖或者null值初始化的时候有用
   protected boolean callSettersOnNulls;
+  //允许使用方法签名中的名称作为语句参数名称
   protected boolean useActualParamName = true;
   protected boolean returnInstanceForEmptyRow;
-
+  //指定mybaits增加到日志名称的前缀
   protected String logPrefix;
+  //日志接口
   protected Class <? extends Log> logImpl;
+  //文件系统接口
   protected Class <? extends VFS> vfsImpl;
+  //本地session范围
   protected LocalCacheScope localCacheScope = LocalCacheScope.SESSION;
   protected JdbcType jdbcTypeForNull = JdbcType.OTHER;
   protected Set<String> lazyLoadTriggerMethods = new HashSet<String>(Arrays.asList(new String[] { "equals", "clone", "hashCode", "toString" }));
@@ -123,13 +135,17 @@ public class Configuration {
   protected AutoMappingUnknownColumnBehavior autoMappingUnknownColumnBehavior = AutoMappingUnknownColumnBehavior.NONE;
 
   protected Properties variables = new Properties();
+  //默认的反射器工程，用于操作属性、构造器方便
   protected ReflectorFactory reflectorFactory = new DefaultReflectorFactory();
+  //对象工厂，所有的类resultMap类都需要依赖工厂来实例化
   protected ObjectFactory objectFactory = new DefaultObjectFactory();
+  //对象包装器工厂，主要用来在创建非原生对象，比如增加了某些监控或者特殊属性的代理类
   protected ObjectWrapperFactory objectWrapperFactory = new DefaultObjectWrapperFactory();
-
+  //延时加载的全局开关。当开启时，所有关联对象都会延时加载。特定关联关系中可通过设置fetchType属性来覆盖该项的开关状态
   protected boolean lazyLoadingEnabled = false;
+  //指定mybatis创建具有延时加载能力的对象所用到的代理工具
   protected ProxyFactory proxyFactory = new JavassistProxyFactory(); // #224 Using internal Javassist instead of OGNL
-
+  //mybatis 可以根据不同的数据库厂商执行不同的语句，这种多厂商的支持是基于语句中的databaseId 属性
   protected String databaseId;
   /**
    * Configuration factory class.
@@ -140,14 +156,21 @@ public class Configuration {
   protected Class<?> configurationFactory;
 
   protected final MapperRegistry mapperRegistry = new MapperRegistry(this);
+  //拦截器链
   protected final InterceptorChain interceptorChain = new InterceptorChain();
+  //类型处理器
   protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
+  //类型别名
   protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
+  //语言驱动
   protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
-
+  //mapper_id 和mapper文件的映射
   protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>("Mapped Statements collection");
+  //mapper_id 和缓存的映射
   protected final Map<String, Cache> caches = new StrictMap<Cache>("Caches collection");
+  //mapper_id 和返回值的映射
   protected final Map<String, ResultMap> resultMaps = new StrictMap<ResultMap>("Result Maps collection");
+  //mapper_id 和 参数的映射
   protected final Map<String, ParameterMap> parameterMaps = new StrictMap<ParameterMap>("Parameter Maps collection");
   protected final Map<String, KeyGenerator> keyGenerators = new StrictMap<KeyGenerator>("Key Generators collection");
 
@@ -841,6 +864,7 @@ public class Configuration {
     }
   }
 
+  //完善了put时的防重、get不到值的异常
   protected static class StrictMap<V> extends HashMap<String, V> {
 
     private static final long serialVersionUID = -4950446264854982944L;
